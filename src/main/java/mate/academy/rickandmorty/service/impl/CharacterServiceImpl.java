@@ -1,12 +1,12 @@
 package mate.academy.rickandmorty.service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import mate.academy.rickandmorty.dto.external.ExternalCharacterDto;
 import mate.academy.rickandmorty.dto.internal.CharacterDto;
 import mate.academy.rickandmorty.dto.internal.CharacterSearchParameters;
-import mate.academy.rickandmorty.exception.CharacterNotFoundException;
 import mate.academy.rickandmorty.mapper.CharacterMapper;
 import mate.academy.rickandmorty.model.Character;
 import mate.academy.rickandmorty.repository.SpecificationBuilder;
@@ -51,7 +51,7 @@ public class CharacterServiceImpl implements CharacterService {
         Random random = new Random();
         Long randomId = random.nextLong(characterRepository.count() - MIN_ID + 1) + MIN_ID;
         Character character = characterRepository.findById(randomId).orElseThrow(() ->
-                new CharacterNotFoundException("Can`t find random character in database"));
+                new EntityNotFoundException("Can`t find random character in database"));
         return characterMapper.toDto(character);
     }
 

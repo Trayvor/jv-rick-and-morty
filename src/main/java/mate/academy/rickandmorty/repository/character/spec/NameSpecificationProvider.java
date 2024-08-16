@@ -8,10 +8,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class NameSpecificationProvider implements SpecificationProvider<Character> {
     public static final String SQL_WILDCARD = "%";
+    public static final String NAME_KEY = "name";
 
     @Override
     public String getKey() {
-        return "name";
+        return NAME_KEY;
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import mate.academy.rickandmorty.dto.external.CharacterResponseDto;
 import mate.academy.rickandmorty.dto.external.ExternalCharacterDto;
-import mate.academy.rickandmorty.exception.FetchingDataException;
+import mate.academy.rickandmorty.exception.CharacterExternalLoadException;
 import mate.academy.rickandmorty.service.DataFetchingService;
 import org.springframework.stereotype.Service;
 
@@ -44,8 +44,8 @@ public class CharacterDataFetchingService implements DataFetchingService<Externa
                 characterDtoList.addAll(characterResponseDto.getResults());
                 nextPageUrl = characterResponseDto.getInfo().getNext();
             } catch (URISyntaxException | IOException | InterruptedException e) {
-                throw new FetchingDataException(e, "Can`t fetch data about characters. URL: "
-                        + URL);
+                throw new CharacterExternalLoadException("Can`t fetch data about characters. URL: "
+                        + URL, e);
             }
         }
         return characterDtoList;
