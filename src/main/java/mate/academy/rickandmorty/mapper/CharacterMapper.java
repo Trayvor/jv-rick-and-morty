@@ -7,10 +7,17 @@ import mate.academy.rickandmorty.model.Character;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(config = MapperConfig.class)
 public interface CharacterMapper {
     @Mapping(source = "id", target = "externalId")
     Character toModel(ExternalCharacterDto externalCharacterDto);
 
+    @Mapping(source = "id", target = "externalId")
+    List<Character> toModelList(List<ExternalCharacterDto> externalCharacterDtoList);
+
     CharacterDto toDto(Character character);
+
+    List<CharacterDto> toDtoList(List<Character> characterList);
 }

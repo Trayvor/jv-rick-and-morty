@@ -18,17 +18,14 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CharacterServiceImpl implements CharacterService {
-    public static final int MIN_ID = 1;
-
     private final CharacterMapper characterMapper;
     private final CharacterRepository characterRepository;
     private final SpecificationBuilder<Character> specificationBuilder;
+    private final Random random = new Random();
 
     @Override
     public void saveAll(List<ExternalCharacterDto> externalCharacterList) {
-        List<Character> characters = externalCharacterList.stream()
-                .map(characterMapper::toModel)
-                .toList();
+        List<Character> characters = characterMapper.toModelList(externalCharacterList);
         characterRepository.saveAll(characters);
     }
 
@@ -48,8 +45,7 @@ public class CharacterServiceImpl implements CharacterService {
 
     @Override
     public CharacterDto getRandomCharacter() {
-        Random random = new Random();
-        Long randomId = random.nextLong(characterRepository.count() - MIN_ID + 1) + MIN_ID;
+        Long randomId = random.nextLong(characterRepository.count() - 1);
         Character character = characterRepository.findById(randomId).orElseThrow(() ->
                 new EntityNotFoundException("Can`t find random character in database"));
         return characterMapper.toDto(character);
@@ -59,9 +55,6 @@ public class CharacterServiceImpl implements CharacterService {
     public List<CharacterDto> search(CharacterSearchParameters characterSearchParameters) {
         Specification<Character> characterSpecification = specificationBuilder
                 .build(characterSearchParameters);
-        return characterRepository.findAll(characterSpecification)
-                .stream()
-                .map(characterMapper::toDto)
-                .toList();
+        return characterMapper.toDtoList(characterRepository.findAll(characterSpecification));
     }
 }
